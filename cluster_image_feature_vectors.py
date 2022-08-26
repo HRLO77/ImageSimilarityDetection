@@ -10,6 +10,7 @@
 #################################################
 
 # Numpy for loading image feature vectors from file
+from fileinput import filename
 import numpy as np
 
 # Time for measuring the process time
@@ -34,7 +35,7 @@ from scipy import spatial
 # So it is used to find product id based on the product image name
 #################################################
 def match_id(filename):
-  with open('/Users/erdemisbilen/Angular/fashionWebScraping/jsonFiles/image_data.json') as json_file:
+  with open('image_data.json') as json_file:
     
     for file in json_file:
         seen = json.loads(file)
@@ -74,7 +75,7 @@ def cluster():
   trees = 10000
 
   # Reads all file names which stores feature vectors 
-  allfiles = glob.glob('/Users/erdemisbilen/Angular/fashionWebScraping/images_scraped/feature-vectors/test/*.npz')
+  allfiles = glob.glob('test/*.npz')
 
   t = AnnoyIndex(dims, metric='angular')
 
@@ -137,7 +138,9 @@ def cluster():
       named_nearest_neighbors.append({
         'similarity': rounded_similarity,
         'master_pi': master_product_id,
-        'similar_pi': neighbor_product_id})
+        'similar_pi': neighbor_product_id,
+        'closest_file': neighbor_file_name,
+        'master_file': file_index_to_file_name[i]})
 
     print("---------------------------------") 
     print("Similarity index       : %s" %i)
